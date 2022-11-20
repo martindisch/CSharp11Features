@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticParse", "StaticParse\StaticParse.csproj", "{5D90313D-08CD-431F-B83F-B36CA4D39AB2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListPattern", "ListPattern\ListPattern.csproj", "{06A23CEB-0E89-47CE-9F9C-05C4DE07FF17}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{5D90313D-08CD-431F-B83F-B36CA4D39AB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D90313D-08CD-431F-B83F-B36CA4D39AB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D90313D-08CD-431F-B83F-B36CA4D39AB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06A23CEB-0E89-47CE-9F9C-05C4DE07FF17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06A23CEB-0E89-47CE-9F9C-05C4DE07FF17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06A23CEB-0E89-47CE-9F9C-05C4DE07FF17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06A23CEB-0E89-47CE-9F9C-05C4DE07FF17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
