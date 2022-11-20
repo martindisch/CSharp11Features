@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticParse", "StaticParse\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListPattern", "ListPattern\ListPattern.csproj", "{06A23CEB-0E89-47CE-9F9C-05C4DE07FF17}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RawStringLiterals", "RawStringLiterals\RawStringLiterals.csproj", "{7D3E2C67-193D-4B9C-83D9-53A4981C2CE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{06A23CEB-0E89-47CE-9F9C-05C4DE07FF17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06A23CEB-0E89-47CE-9F9C-05C4DE07FF17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06A23CEB-0E89-47CE-9F9C-05C4DE07FF17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D3E2C67-193D-4B9C-83D9-53A4981C2CE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D3E2C67-193D-4B9C-83D9-53A4981C2CE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D3E2C67-193D-4B9C-83D9-53A4981C2CE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D3E2C67-193D-4B9C-83D9-53A4981C2CE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
