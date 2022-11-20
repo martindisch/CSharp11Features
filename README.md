@@ -36,7 +36,7 @@ bool IsPalindrome(char[] characters) => characters switch
 };
 ```
 
-## Generic parse/static interface members and generics
+## Generic parse/static interface members
 
 Thanks to some fancy type system features, the long-standing convention of the
 static `Parse` factory method can be formalized through the `IParsable<TSelf>`
