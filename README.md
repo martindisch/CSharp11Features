@@ -74,6 +74,59 @@ static T GenericParse<T>(string input) where T : IParsable<T>
 
 which accepts all other parsable types like integers as well.
 
+## Required modifier
+
+The object initializer syntax is pretty sweet. But for a long time, using it
+has been extremely unsafe. Consider the following:
+
+```csharp
+record InsanePerson
+{
+    public int Age { get; init; }
+    public string FirstName { get; init; } = null!;
+    public string? MiddleName { get; init; }
+}
+
+// We just made a mistake. Is it obvious? No.
+var invalidPerson = new InsanePerson { MiddleName = "None" };
+```
+
+With the type receiving the dreaded default constructor, even the compiler
+notices that `FirstName` for example could be left uninitialized, so in our
+infinite wisdom we decide to shut it up with the "trust me"-operator. This is
+completely our fault, but a pattern we see frequently. Now for the value type
+`Age` the language shows us no such kindness, as it will silently
+auto-initialize to the default value of 0 if we forget to set it. Just great.
+
+The solution is to create constructors on all types to deny the dumb default
+constructor. But constructors are so verbose! Luckily, C# 9 graced us with its
+extremely concise positional record syntax, allowing us to define a type and
+have its full constructor implemented at the same time on a single line.
+
+```csharp
+record PositionalPerson(int Age, string FirstName, string? MiddleName = null);
+
+// Obviously fails to compile, as it should
+var invalidPerson = new PositionalPerson("None");
+```
+
+This is nice and all, but what if you can't or won't use records and are stuck
+with classes? C# 11 comes to the rescue with `required` members.
+
+```csharp
+class RequiredPerson
+{
+    public required int Age { get; init; }
+    public required string FirstName { get; init; }
+    public string? MiddleName { get; init; }
+}
+
+// This time the compiler will stop us from shooting ourselves in the foot
+var invalidPerson = new RequiredPerson { MiddleName = "None" };
+```
+
+Beautiful!
+
 ## License
 
 Licensed under either of
