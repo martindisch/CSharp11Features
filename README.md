@@ -2,17 +2,18 @@
 
 ## Raw string literals
 
-How many times have I tried to achieve something like this (not to hack
-together dangerous SQL statements of course), only to end up with an ugly
-"+"-concatenated mess with terrible indentation?
+Luckily I don't have to do a lot of manual formatting of semi-structured data,
+but whenever I do, I end up with an ugly "+"-concatenated mess with terrible
+indentation. Not anymore!
 
 ```csharp
 var id = 25;
 
-var fantasticSqlInjection = $"""
--- I can use "quotes" as much as I like!
-SELECT * FROM schema.table
-WHERE Id = {id}
+var meep = $"""
+<person id="{id}">
+    <name>John Doe</name>
+    <address kind="home">Market Street 45</address>
+</person>
 """;
 ```
 

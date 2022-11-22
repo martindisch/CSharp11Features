@@ -1,9 +1,10 @@
 var id = 25;
 
-var fantasticSqlInjection = $"""
--- I can use "quotes" as much as I like!
-SELECT * FROM schema.table
-WHERE Id = {id}
+var meep = $"""
+<person id="{id}">
+    <name>John Doe</name>
+    <address kind="home">Market Street 45</address>
+</person>
 """;
 
-Console.WriteLine(fantasticSqlInjection);
+Console.WriteLine(meep);
