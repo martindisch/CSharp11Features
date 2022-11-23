@@ -1,6 +1,6 @@
 using System.Threading.Tasks.Dataflow;
 
-var multiplier = new TransformManyBlock<int, TwoNumbers>(Multiplier, new ExecutionDataflowBlockOptions { BoundedCapacity = 1 });
+var multiplier = new TransformManyBlock<int, TwoNumbers>(MultiplierAsync, new ExecutionDataflowBlockOptions { BoundedCapacity = 1 });
 var consumer = new ActionBlock<TwoNumbers>(Printer, new ExecutionDataflowBlockOptions { BoundedCapacity = 1 });
 
 multiplier.LinkTo(consumer, new DataflowLinkOptions { PropagateCompletion = true });
@@ -14,10 +14,11 @@ multiplier.Complete();
 
 await consumer.Completion;
 
-IEnumerable<TwoNumbers> Multiplier(int number)
+async IAsyncEnumerable<TwoNumbers> MultiplierAsync(int number)
 {
     foreach (var n in Enumerable.Range(1, 5))
     {
+        await Task.Delay(50);
         yield return new(number, n);
     }
 }
