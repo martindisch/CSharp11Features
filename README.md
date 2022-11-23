@@ -128,6 +128,48 @@ var invalidPerson = new RequiredPerson { MiddleName = "None" };
 
 Beautiful!
 
+## Bonus
+
+Because of the addition of static interface members, it's now possible to
+implement part of another neat feature of the Rust standard library, the [From
+trait](https://doc.rust-lang.org/std/convert/trait.From.html).
+
+```csharp
+interface IFrom<TFrom, TSelf>
+{
+    abstract static TSelf From(TFrom from);
+}
+```
+
+Assuming you have some kind of type representing your data
+
+```csharp
+record Person(string Name, List<string> Friends);
+```
+
+and would like to map it to an API response representation with only an
+aggregated count of friends instead of their full names, you can implement the
+transformation on the target type.
+
+```csharp
+record PersonResponse(string Name, int FriendCount) : IFrom<Person, PersonResponse>
+{
+    public static PersonResponse From(Person person) => new(person.Name, person.Friends.Count);
+}
+```
+
+Then use it as expected.
+
+```csharp
+var person = new Person("John", new() { "Andrea", "Frank", "Suzie" });
+var personResponse = PersonResponse.From(person);
+```
+
+What's the benefit? At this point not much to be honest. It's a way to
+formalize the ad-hoc mappings we often come up with. You could use it to
+express type constraints, for example you could accept or return something that
+implements `IFrom` for a specific type.
+
 ## License
 
 Licensed under either of
