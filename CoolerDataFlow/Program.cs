@@ -1,31 +1,47 @@
 using System.Threading.Tasks.Dataflow;
 
-var multiplier = new TransformManyBlock<int, TwoNumbers>(MultiplierAsync, new ExecutionDataflowBlockOptions { BoundedCapacity = 1 });
-var consumer = new ActionBlock<TwoNumbers>(Printer, new ExecutionDataflowBlockOptions { BoundedCapacity = 1 });
+var simulatedDb = new SimulatedDb();
 
-multiplier.LinkTo(consumer, new DataflowLinkOptions { PropagateCompletion = true });
+var notificationProducer = new TransformManyBlock<string, NotificationBatch>(GenerateNotificationBatchesAsync, new ExecutionDataflowBlockOptions { BoundedCapacity = 1 });
+var notificationSender = new ActionBlock<NotificationBatch>(SendNotificationsAsync, new ExecutionDataflowBlockOptions { BoundedCapacity = 1 });
 
-foreach (var n in Enumerable.Range(1, 5))
+notificationProducer.LinkTo(notificationSender, new DataflowLinkOptions { PropagateCompletion = true });
+
+WriteTimedLine("Start processing topics");
+
+var notificationTopics = new[] { "Gaming", "Furniture", "Smartphones", "Furniture" };
+foreach (var topic in notificationTopics)
 {
-    await multiplier.SendAsync(n);
+    await notificationProducer.SendAsync(topic);
 }
 
-multiplier.Complete();
+notificationProducer.Complete();
+await notificationSender.Completion;
 
-await consumer.Completion;
-
-async IAsyncEnumerable<TwoNumbers> MultiplierAsync(int number)
+async IAsyncEnumerable<NotificationBatch> GenerateNotificationBatchesAsync(string topic)
 {
-    foreach (var n in Enumerable.Range(1, 5))
+    int? after = null;
+
+    while (true)
     {
-        await Task.Delay(50);
-        yield return new(number, n);
+        var userIds = await simulatedDb.GetNextSubscribedUsersBatchAsync(topic, after);
+        if (userIds.Count == 0)
+        {
+            yield break;
+        }
+
+        after = userIds.Last();
+        yield return new(topic, userIds);
     }
 }
 
-void Printer(TwoNumbers numbers)
+async Task SendNotificationsAsync(NotificationBatch notificationBatch)
 {
-    Console.WriteLine(numbers);
+    await Task.Delay(TimeSpan.FromSeconds(1));
+
+    WriteTimedLine($"Sent notification for topic {notificationBatch.Topic} to {notificationBatch.UserIds.Count} users");
 }
 
-record TwoNumbers(int First, int Second);
+void WriteTimedLine(string text) => Console.WriteLine($"[{DateTime.Now.ToString("T")}] {text}");
+
+record NotificationBatch(string Topic, List<int> UserIds);
