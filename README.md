@@ -25,8 +25,8 @@ of ending up with what you intended.
 
 ## List pattern
 
-This finally gives C# pattern matching capabilities on par with [the best
-programming languages](https://adventures.michaelfbryan.com/posts/daily/slice-patterns/#checking-for-palindromes)
+This finally gives C# pattern matching capabilities on par with
+[the best programming languages](https://adventures.michaelfbryan.com/posts/daily/slice-patterns/#checking-for-palindromes)
 out there. You can start writing some truly beautiful stuff.
 
 ```csharp
@@ -177,8 +177,9 @@ users for a topic at once to return a `Notification` and pass them on to the
 next block. However, that is quite unlikely. You might have many hundreds of
 thousands of users, meaning that you would most likely want to iterate over
 your database in a paging fashion to produce batches of user IDs instead. Easy
-enough! Why don't we rename `Notification` to `record NotificationBatch(string Topic, List<int> UserIds)` and turn the first block into a
-`TransformManyBlock`?
+enough! Why don't we rename `Notification` to
+`record NotificationBatch(string Topic, List<int> UserIds)` and turn the first
+block into a `TransformManyBlock`?
 
 ```csharp
 var notificationProducer = new TransformManyBlock<string, NotificationBatch>(
