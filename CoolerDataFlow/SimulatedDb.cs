@@ -10,7 +10,7 @@ class SimulatedDb
             return new();
         }
 
-        await Task.Delay(TimeSpan.FromSeconds(2));
+        await Task.Delay(TimeSpan.FromSeconds(1));
 
         return Enumerable
             .Repeat(1, 5)

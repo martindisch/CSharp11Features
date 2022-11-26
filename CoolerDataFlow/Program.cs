@@ -37,7 +37,7 @@ async IAsyncEnumerable<NotificationBatch> GenerateNotificationBatchesAsync(strin
 
 async Task SendNotificationsAsync(NotificationBatch notificationBatch)
 {
-    await Task.Delay(TimeSpan.FromSeconds(1));
+    await Task.Delay(TimeSpan.FromSeconds(2));
 
     WriteTimedLine($"Sent notification for topic {notificationBatch.Topic} to {notificationBatch.UserIds.Count} users");
 }
