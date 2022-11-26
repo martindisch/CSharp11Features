@@ -9,7 +9,7 @@ notificationProducer.LinkTo(notificationSender, new DataflowLinkOptions { Propag
 
 WriteTimedLine("Start processing topics");
 
-var notificationTopics = new[] { "Gaming", "Furniture", "Smartphones", "Furniture" };
+var notificationTopics = new[] { "Gaming", "Furniture", "Smartphones", "Fashion" };
 foreach (var topic in notificationTopics)
 {
     await notificationProducer.SendAsync(topic);
