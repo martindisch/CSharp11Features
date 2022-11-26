@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RawStringLiterals", "RawStr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequiredModifier", "RequiredModifier\RequiredModifier.csproj", "{F30C7951-E592-4ADA-BF20-3B3057C34B7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoolerDataFlow", "CoolerDataFlow\CoolerDataFlow.csproj", "{8682B2CA-550D-4F35-9A33-44D7B54E057C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncEnumerableDataflow", "AsyncEnumerableDataflow\AsyncEnumerableDataflow.csproj", "{8682B2CA-550D-4F35-9A33-44D7B54E057C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

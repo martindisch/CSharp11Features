@@ -261,7 +261,7 @@ await notificationSender.Completion;
 we might see something like the following.
 
 ```console
-$ dotnet run --project CoolerDataFlow
+$ dotnet run --project AsyncEnumerableDataflow
 [1:38:12PM] Start processing topics
 [1:38:15PM] Sent notification for topic Gaming to 5 users
 [1:38:17PM] Sent notification for topic Gaming to 5 users
