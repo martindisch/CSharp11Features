@@ -131,7 +131,7 @@ Beautiful!
 ## Bonus: IAsyncEnumerable support in Dataflow TransformManyBlock
 
 Admittedly, this is a rather niche thing that I'm pretty sure barely anybody
-knows about. But those who do have wanted it badly. If you haven't heard of
+knows about. But those who do, have wanted it badly. If you haven't heard of
 [TPL Dataflow](https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/dataflow-task-parallel-library)
 yet, I highly recommend reading up on it. It's a hidden gem of the .NET
 Framework.
@@ -145,7 +145,7 @@ pipeline therefore has two stages/blocks:
   string with the topic name) and returns a `Notification`. This is merely a
   tuple containing the topic name and IDs of all users that are subscribed to
   it and should therefore receive a notification. It's modeled as
-  `record Notification(string Topic, List<int> UserIds)`. The notification
+  `record Notification(string Topic, List<int> UserIds)`. This notification
   producer loads the IDs of all users that have subscribed to a certain topic
   from the database.
 - A notification sender, which accepts such a `Notification` and notifies the
@@ -170,7 +170,7 @@ The `BoundedCapacity` is there to provide backpressure, guaranteeing that we
 don't load users from the database faster than we can send notifications. This
 prevents unnecessary load on the database and potentially high memory usage for
 buffering all the accumulated notifications, in case loading them from the
-database is faster than sending notification.
+database is faster than sending notifications.
 
 This is fine and dandy, as long as `GenerateNotificationAsync` can load all
 users for a topic at once to return a `Notification` and pass them on to the
@@ -192,18 +192,18 @@ accepts a single topic and produces many batches of notifications. The trouble
 starts when thinking about how to implement this. If we still have to write an
 async function that takes a single string and returns a list of
 `NotificationBatch`, don't we have the same problem as before? That we have to
-load all user IDs for the topic at once and then return them in a list of
-smaller `NotificationBatch` chunks? It may look this way, but remember that the
-signature of the function we provide for the `TransformManyBlock` is
+load all user IDs for the topic at once and then return them, this time in a
+list of smaller `NotificationBatch` chunks? It may look this way, but remember
+that the signature of the function we provide for the `TransformManyBlock` is
 `Func<TInput, Task<IEnumerable<TOutput>>>`. Since we can return an enumerable,
 couldn't we use an iterator method that does
 `yield return new NotificationBatch(...)` after having loaded the next batch of
 user IDs for the topic from the database? That would produce a nice, steady
 stream of batches that would flow into the next block as they become available.
 
-We can, but only if our database access is synchronous, since it's of course
-not possible to await within an iterator method returning `IEnumerable`. And
-that's exactly the problem described in
+We can, but only if our database access is synchronous, as it's of course not
+possible to await within an iterator method returning `IEnumerable`. And that's
+exactly the problem described in
 [this issue](https://github.com/dotnet/runtime/issues/30863)
 that has been solved in .NET 7. It's now possible to to provide a
 transformation `Func<TInput, IAsyncEnumerable<TOutput>>` to achieve this. Now
@@ -282,7 +282,7 @@ $ dotnet run --project AsyncEnumerableDataflow
 
 It takes the first batch 3 seconds to pass through the pipeline, because cycle
 time is 1 + 2 seconds. But after that we are able to fully process a batch
-every 2 seconds, because that's the time the bottleneck (sending notifications)
+every 2 seconds, which is the time the bottleneck (sending notifications)
 takes.
 
 ## License
