@@ -64,3 +64,21 @@ var meep = $"""
 
 - Works with raw curly braces without having to escape them
 - Removes newlines after opening and same plus whitespace before closing quote
+
+---
+layout: section
+---
+
+# List pattern
+
+---
+
+## Almost 🦀
+
+```csharp
+bool IsPalindrome(char[] characters) => characters switch
+{
+    [var first, .. var middle, var last] => first == last && IsPalindrome(middle),
+    [] or [_] => true,
+};
+```
