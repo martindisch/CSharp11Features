@@ -5,7 +5,7 @@ highlighter: shiki
 
 # The best C# 11/.NET 7 features
 
-## A biased selection
+## A very biased selection
 
 ---
 layout: section
