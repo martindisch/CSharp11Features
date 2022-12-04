@@ -113,7 +113,7 @@ record PoorCulture(string Language, string Country) : IParsable<PoorCulture>
 
 ---
 
-# Use it
+# Usage
 
 ## Specify interface as type bound
 
@@ -200,10 +200,10 @@ A system that sends notifications with news about certain topics to users that
 have subscribed to those topics. Our pipeline therefore has two stages/blocks.
 
 1. A notification producer, which takes a topic for which we have news and
-  returns a `Notification` containing the topic name and IDs of all users that
-  are subscribed to it.
+   returns a `Notification` containing the topic name and IDs of all users that
+   are subscribed to it.
 2. A notification sender, which accepts such a `Notification` and notifies the
-  users in it about the topic.
+   users in it about the topic.
 
 ```csharp
 record Notification(string Topic, List<int> UserIds)
@@ -227,6 +227,7 @@ notificationProducer.LinkTo(
 ```
 
 BoundedCapacity serves as backpressure
+
 - Great for preventing unnecessary load
 - As well as memory usage
 
