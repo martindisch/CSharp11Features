@@ -3,8 +3,8 @@
 ## Raw string literals
 
 Luckily I don't have to do a lot of manual formatting of semi-structured data,
-but whenever I do, I end up with an ugly "+"-concatenated mess with terrible
-indentation. Not anymore!
+but whenever I do, especially if the text contains quotes or curly braces, it
+gets ugly very quickly. Not anymore!
 
 ```csharp
 var id = 25;
