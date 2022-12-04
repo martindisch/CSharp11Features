@@ -177,3 +177,138 @@ class RequiredPerson
 // This time the compiler will stop us from shooting ourselves in the foot
 var invalidPerson = new RequiredPerson { MiddleName = "None" };
 ```
+
+---
+layout: section
+---
+
+# Bonus
+
+## IAsyncEnumerable support in Dataflow TransformManyBlock
+
+---
+
+## What's this DataFlow thing again?
+
+- Part of .NET Framework
+- Allows building pipelines of multiple blocks that process and transform data
+- Makes adding concurrency a breeze
+
+## Example
+
+A system that sends notifications with news about certain topics to users that
+have subscribed to those topics. Our pipeline therefore has two stages/blocks.
+
+1. A notification producer, which takes a topic for which we have news and
+  returns a `Notification` containing the topic name and IDs of all users that
+  are subscribed to it.
+2. A notification sender, which accepts such a `Notification` and notifies the
+  users in it about the topic.
+
+```csharp
+record Notification(string Topic, List<int> UserIds)
+```
+
+---
+
+## Initial pipeline definition
+
+```csharp
+var notificationProducer = new TransformBlock<string, Notification>(
+    GenerateNotificationAsync,
+    new ExecutionDataflowBlockOptions { BoundedCapacity = 1 });
+var notificationSender = new ActionBlock<Notification>(
+    SendNotificationsAsync,
+    new ExecutionDataflowBlockOptions { BoundedCapacity = 1 });
+
+notificationProducer.LinkTo(
+    notificationSender,
+    new DataflowLinkOptions { PropagateCompletion = true });
+```
+
+BoundedCapacity serves as backpressure
+- Great for preventing unnecessary load
+- As well as memory usage
+
+This works well as long as we can load _all_ users for a topic at once.
+But what if that's not the case?
+
+---
+
+## Switching to batches
+
+Turn the notification into
+
+```csharp
+record NotificationBatch(string Topic, List<int> UserIds)
+```
+
+and the first block into
+
+```csharp
+var notificationProducer = new TransformManyBlock<string, NotificationBatch>(
+    GenerateNotificationBatchesAsync,
+    new ExecutionDataflowBlockOptions { BoundedCapacity = 1 });
+```
+
+- Now `GenerateNotificationBatchesAsync` returns a bunch of `NotificationBatch`
+  for each topic
+- But that doesn't help if it still has to return the full list of all batches
+  in one go
+- Since its signature is `Func<TInput, Task<IEnumerable<TOutput>>>`, we could
+  use an iterator method that yields one batch after the other
+- Except we can't. Or couldn't 😏
+
+---
+
+```csharp
+async IAsyncEnumerable<NotificationBatch> GenerateNotificationBatchesAsync(string topic)
+{
+    int? after = null;
+
+    while (true)
+    {
+        var userIds = await simulatedDb.GetNextSubscribedUsersBatchAsync(topic, after);
+        if (userIds.Count == 0)
+        {
+            yield break;
+        }
+
+        after = userIds.Last();
+        yield return new(topic, userIds);
+    }
+}
+```
+
+```csharp
+var notificationTopics = new[] { "Gaming", "Furniture", "Smartphones", "Fashion" };
+foreach (var topic in notificationTopics)
+{
+    await notificationProducer.SendAsync(topic);
+}
+
+notificationProducer.Complete();
+await notificationSender.Completion;
+```
+
+---
+
+```
+$ dotnet run --project AsyncEnumerableDataflow
+[1:38:12PM] Start processing topics
+[1:38:15PM] Sent notification for topic Gaming to 5 users
+[1:38:17PM] Sent notification for topic Gaming to 5 users
+[1:38:19PM] Sent notification for topic Gaming to 5 users
+[1:38:21PM] Sent notification for topic Furniture to 5 users
+[1:38:23PM] Sent notification for topic Furniture to 5 users
+[1:38:25PM] Sent notification for topic Furniture to 5 users
+[1:38:27PM] Sent notification for topic Furniture to 5 users
+[1:38:29PM] Sent notification for topic Furniture to 5 users
+[1:38:31PM] Sent notification for topic Furniture to 5 users
+[1:38:33PM] Sent notification for topic Furniture to 5 users
+[1:38:35PM] Sent notification for topic Smartphones to 5 users
+[1:38:37PM] Sent notification for topic Smartphones to 5 users
+[1:38:39PM] Sent notification for topic Fashion to 5 users
+[1:38:41PM] Sent notification for topic Fashion to 5 users
+[1:38:43PM] Sent notification for topic Fashion to 5 users
+```
