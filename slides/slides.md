@@ -130,3 +130,50 @@ static T GenericParse<T>(string input) where T : IParsable<T>
 var genericallyParsedInt = GenericParse<int>("5");
 var genericallyParsedPoorCulture = GenericParse<PoorCulture>("de-CH");
 ```
+
+---
+layout: section
+---
+
+# Required modifier
+
+---
+
+This was pretty bad.
+
+```csharp
+class InsanePerson
+{
+    public int Age { get; init; }
+    public string FirstName { get; init; } = null!;
+    public string? MiddleName { get; init; }
+}
+
+// We just made a mistake. Is it obvious? No.
+var invalidPerson = new InsanePerson { MiddleName = "None" };
+```
+
+Constructors everywhere? Much boilerplate!
+
+```csharp
+record PositionalPerson(int Age, string FirstName, string? MiddleName = null);
+
+// Obviously fails to compile, as it should
+var invalidPerson = new PositionalPerson("None");
+```
+
+---
+
+Behold `required`!
+
+```csharp
+class RequiredPerson
+{
+    public required int Age { get; init; }
+    public required string FirstName { get; init; }
+    public string? MiddleName { get; init; }
+}
+
+// This time the compiler will stop us from shooting ourselves in the foot
+var invalidPerson = new RequiredPerson { MiddleName = "None" };
+```
