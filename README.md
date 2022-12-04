@@ -81,7 +81,7 @@ The object initializer syntax is pretty sweet. But for a long time, using it
 has been extremely unsafe. Consider the following:
 
 ```csharp
-record InsanePerson
+class InsanePerson
 {
     public int Age { get; init; }
     public string FirstName { get; init; } = null!;
