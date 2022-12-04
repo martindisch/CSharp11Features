@@ -82,3 +82,51 @@ bool IsPalindrome(char[] characters) => characters switch
     [] or [_] => true,
 };
 ```
+
+---
+layout: section
+---
+
+# Generic parse<br>/<br>static interface members
+
+---
+
+# Implement interface specifying static members
+
+```csharp
+record PoorCulture(string Language, string Country) : IParsable<PoorCulture>
+{
+    public static PoorCulture Parse(string s, IFormatProvider? provider)
+    {
+        var parts = s.Split('-');
+        if (parts.Length != 2)
+        {
+            throw new FormatException("Oh noes");
+        }
+
+        return new(parts[0], parts[1]);
+    }
+
+    // TryParse omitted for brevity
+}
+```
+
+---
+
+# Use it
+
+## Specify interface as type bound
+
+```csharp
+static T GenericParse<T>(string input) where T : IParsable<T>
+{
+    return T.Parse(input, null);
+}
+```
+
+## Select implementation with generic type parameter
+
+```csharp
+var genericallyParsedInt = GenericParse<int>("5");
+var genericallyParsedPoorCulture = GenericParse<PoorCulture>("de-CH");
+```
