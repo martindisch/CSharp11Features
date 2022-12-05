@@ -1,5 +1,7 @@
 # My favorite C# 11/.NET 7 features
 
+Also available as [slides](https://martindisch.github.io/CSharp11Features/).
+
 ## Raw string literals
 
 Luckily I don't have to do a lot of manual formatting of semi-structured data,
