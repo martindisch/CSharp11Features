@@ -35,7 +35,7 @@ jobs:
         run: npm install
       - name: Build slides
         working-directory: slides
-        run: npm run build -- --base /${GITHUB_REPOSITORY#*/}
+        run: npm run build -- --base /${GITHUB_REPOSITORY#*/}/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
